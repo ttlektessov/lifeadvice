@@ -40,3 +40,30 @@
 .read-the-docs {
   color: #888;
 }
+
+.life-advice {
+  background: -webkit-linear-gradient(#01d9ff, #333);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.refresh-button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #444444;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  &:hover {
+    border-color: #01d9ff;
+  }
+  &:focus {
+    border-color: #01d9ff;
+  }
+  &:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+}

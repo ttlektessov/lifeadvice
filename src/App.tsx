@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./App.css";
+import "./App.scss";
 import Spinner from "./components/Spinner";
 
 export type TAdviceSlip = {
@@ -44,7 +44,7 @@ function App() {
 
   return (
     <>
-      <h1>Life Advice</h1>
+      <h1 className="life-advice">Life Advice</h1>
       {loading ? (
         <Spinner />
       ) : error ? (
@@ -56,6 +56,7 @@ function App() {
             onClick={fetchAdvice}
             title={"Refresh the advice"}
             type={"button"}
+            className="refresh-button"
           >
             Refresh
           </button>
