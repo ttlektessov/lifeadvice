@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import Spinner from "./components/Spinner";
 
+export type TAdviceSlip = {
+  slip: {
+    id: number;
+    advice: string;
+  };
+};
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<TAdviceSlip | null>(null);
+
+  const slip = data?.slip?.advice;
+
+  const fetchAdvice = async () => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    try {
+      setLoading(true);
+      const response = await fetch("https://api.adviceslip.com/advice", {
+        signal,
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error: Status ${response.status}`);
+      }
+      const advice = await response.json();
+      setData(advice);
+      setError("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error");
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+
+    return () => abortController.abort();
+  };
+  useEffect(() => {
+    fetchAdvice();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Life Advice</h1>
+      {loading ? (
+        <Spinner />
+      ) : error ? (
+        <p>Error loading advice</p>
+      ) : (
+        <div style={{ maxWidth: "70rem" }}>
+          <p style={{ fontSize: "24px", fontStyle: "italic" }}>"{slip}"</p>
+          <button
+            onClick={fetchAdvice}
+            title={"Refresh the advice"}
+            type={"button"}
+          >
+            Refresh
+          </button>
+        </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
