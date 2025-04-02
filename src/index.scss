@@ -45,5 +45,8 @@ h1 {
   }
   button {
     background-color: #f9f9f9;
+    &:hover {
+      color: burlywood;
+    }
   }
 }
